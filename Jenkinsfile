@@ -7,14 +7,14 @@ pipeline {
     }
 
     environment {
-        IMAGE = "yourname/custom-image:latest"
+        IMAGE = "arunasri@0096/color:latest"
     }
 
     stages {
 
         stage('Clone') {
             steps {
-                git 'https://github.com/your-repo/devops-java-project.git'
+                git 'https://github.com/Arunasri-0096/final.git'
             }
         }
 
@@ -26,8 +26,8 @@ pipeline {
 
         stage('SonarQube') {
             steps {
-                withSonarQubeEnv('sonar-server') {
-                    sh 'mvn sonar:sonar'
+                withSonarQubeEnv('sonar-scaner') {
+                    sh 'mvn sonar:scaner'
                 }
             }
         }
@@ -40,7 +40,7 @@ pipeline {
 
         stage('Docker Pull') {
             steps {
-                sh 'docker pull $IMAGE'
+                sh 'docker pull $color'
             }
         }
 
