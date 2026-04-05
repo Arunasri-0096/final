@@ -2,8 +2,8 @@ pipeline {
     agent any
 
     tools {
-        maven 'maven3'   // Make sure this matches your Jenkins Maven tool name
-        jdk 'jdk17'      // Make sure this matches your Jenkins JDK tool name
+        maven 'maven3'   // Must match your Jenkins Maven tool name
+        jdk 'jdk17'      // Must match your Jenkins JDK tool name
     }
 
     environment {
@@ -14,21 +14,21 @@ pipeline {
 
         stage('Clone') {
             steps {
-                // Clone your Git repository
+                // Clone your repository
                 git branch: 'main', url: 'https://github.com/Arunasri-0096/final.git'
             }
         }
 
         stage('Build') {
             steps {
-                // Run Maven build in the workspace directory (where POM exists)
+                // Build the project using Maven
                 sh 'mvn clean package -DskipTests'
             }
         }
 
         stage('SonarQube Analysis') {
             steps {
-                withSonarQubeEnv('sonar-server') {  // Make sure the SonarQube server name matches your Jenkins config
+                withSonarQubeEnv('sonar-server') { // Make sure this matches your Jenkins SonarQube config
                     sh '''
                         mvn sonar:sonar \
                         -Dsonar.projectKey=color \
@@ -41,15 +41,29 @@ pipeline {
 
         stage('Nexus Upload') {
             steps {
-                // Inject credentials and run Maven deploy
+                // Inject Jenkins credentials and write a temporary settings.xml for Maven
                 withCredentials([usernamePassword(
-                    credentialsId: 'nexus-creds', 
-                    usernameVariable: 'NEXUS_USER', 
-                    passwordVariable: 'NEXUS_PASS'
+                    credentialsId: 'nexus-creds',
+                    usernameVariable: 'USER',
+                    passwordVariable: 'PASS'
                 )]) {
-                    sh '''
-                        mvn deploy --settings /var/lib/jenkins/.m2/settings.xml -DskipTests
-                    '''
+                    writeFile file: 'settings-temp.xml', text: """
+<settings>
+  <servers>
+    <server>
+      <id>nexus-releases</id>
+      <username>${USER}</username>
+      <password>${PASS}</password>
+    </server>
+    <server>
+      <id>nexus-snapshots</id>
+      <username>${USER}</username>
+      <password>${PASS}</password>
+    </server>
+  </servers>
+</settings>
+"""
+                    sh 'mvn deploy --settings settings-temp.xml -DskipTests'
                 }
             }
         }
@@ -63,7 +77,7 @@ pipeline {
 
         stage('K8s Deploy') {
             steps {
-                // Apply Kubernetes manifests
+                // Deploy to Kubernetes cluster
                 sh 'kubectl apply -f deployment.yaml'
                 sh 'kubectl apply -f service.yaml'
             }
