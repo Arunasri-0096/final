@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: color
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: vidya
+  template:
+    metadata:
+      labels:
+        app: vidya
+    spec:
+      containers:
+      - name: color-container
+        image: arunasri@0096/color:latest
+        ports:
+        - containerPort: 8080
