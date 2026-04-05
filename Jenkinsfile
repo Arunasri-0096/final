@@ -40,12 +40,11 @@ stage('Nexus Upload') {
     steps {
         sh '''
         mvn deploy \
-        --settings /var/lib/jenkins/.m2/settings.xml \
-        -X
+        -DskipTests \
+        --settings /var/lib/jenkins/.m2/settings.xml
         '''
     }
 }
-
         stage('Docker Pull') {
             steps {
                 sh 'docker pull $color'
