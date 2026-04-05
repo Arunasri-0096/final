@@ -36,23 +36,19 @@ pipeline {
                 }
             }
         }
-
-        stage('Nexus Upload') {
-            steps {
-                withCredentials([usernamePassword(
-                    credentialsId: 'nexus-creds', 
-                    usernameVariable: 'NEXUS_USER', 
-                    passwordVariable: 'NEXUS_PASS'
-                )]) {
-                    sh '''
-                    mvn deploy --settings /var/lib/jenkins/.m2/settings.xml \
-                    -Dnexus.username=$NEXUS_USER \
-                    -Dnexus.password=$NEXUS_PASS
-                    '''
-                }
-            }
+stage('Nexus Upload') {
+    steps {
+        withCredentials([usernamePassword(
+            credentialsId: 'nexus-creds',
+            usernameVariable: 'NEXUS_USER',
+            passwordVariable: 'NEXUS_PASS'
+        )]) {
+            sh '''
+            mvn deploy --settings /var/lib/jenkins/.m2/settings.xml -DskipTests
+            '''
         }
-
+    }
+}
         stage('Docker Pull') {
             steps {
                 sh 'docker pull $IMAGE'
