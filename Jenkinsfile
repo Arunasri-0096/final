@@ -36,18 +36,26 @@ pipeline {
                 }
             }
         }
-stage('Nexus Upload') {
-    steps {
-        sh '''
-        mvn deploy \
-        -DskipTests \
-        --settings /var/lib/jenkins/.m2/settings.xml
-        '''
-    }
-}
+
+        stage('Nexus Upload') {
+            steps {
+                withCredentials([usernamePassword(
+                    credentialsId: 'nexus-creds', 
+                    usernameVariable: 'NEXUS_USER', 
+                    passwordVariable: 'NEXUS_PASS'
+                )]) {
+                    sh '''
+                    mvn deploy --settings /var/lib/jenkins/.m2/settings.xml \
+                    -Dnexus.username=$NEXUS_USER \
+                    -Dnexus.password=$NEXUS_PASS
+                    '''
+                }
+            }
+        }
+
         stage('Docker Pull') {
             steps {
-                sh 'docker pull $color'
+                sh 'docker pull $IMAGE'
             }
         }
 
