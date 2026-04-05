@@ -1,0 +1,12 @@
+stage('SonarQube Scan') {
+    steps {
+        withSonarQubeEnv('sonar-server') {
+            sh 'mvn sonar:sonar'
+        }
+    }
+}
+stage('Upload to Nexus') {
+    steps {
+        sh 'mvn deploy'
+    }
+}
