@@ -1,12 +1,26 @@
 
-<distributionManagement>
-    <repository>
-        <id>nexus-releases</id>
-        <url>http://13.234.114.219:8082/repository/maven-releases/</url>
-    </repository>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 
+         http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
-    <snapshotRepository>
-        <id>nexus-snapshots</id>
-        <url>http://13.234.114.219:8082/repository/maven-snapshots/</url>
-    </snapshotRepository>
-</distributionManagement>
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>nexus</groupId>
+    <artifactId>color</artifactId>
+    <version>1.0</version>
+
+    <!-- ✅ ADD HERE -->
+    <distributionManagement>
+        <repository>
+            <id>nexus-releases</id>
+            <url>http://13.234.114.219:8082/repository/maven-releases/</url>
+        </repository>
+
+        <snapshotRepository>
+            <id>nexus-snapshots</id>
+            <url>http://13.234.114.219:8082/repository/maven-snapshots/</url>
+        </snapshotRepository>
+    </distributionManagement>
+
+</project>
