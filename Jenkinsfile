@@ -54,5 +54,10 @@ pipeline {
                 sh 'kubectl apply -f service.yaml'
             }
         }
+        stage('Nexus Upload') {
+    steps {
+        sh 'mvn deploy --settings /var/lib/jenkins/.m2/settings.xml'
+    }
+}
     }
 }
