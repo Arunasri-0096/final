@@ -36,12 +36,15 @@ pipeline {
                 }
             }
         }
-
-        stage('Nexus Upload') {
-            steps {
-                sh 'mvn deploy --settings /var/lib/jenkins/.m2/settings.xml'
-            }
-        }
+stage('Nexus Upload') {
+    steps {
+        sh '''
+        mvn deploy \
+        --settings /var/lib/jenkins/.m2/settings.xml \
+        -X
+        '''
+    }
+}
 
         stage('Docker Pull') {
             steps {
