@@ -14,7 +14,7 @@ pipeline {
 
         stage('Clone') {
             steps {
-                git 'https://github.com/Arunasri-0096/final.git'
+                git branch: 'main', url: 'https://github.com/Arunasri-0096/final.git'
             }
         }
 
