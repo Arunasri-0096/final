@@ -1,7 +1,12 @@
-<project>
-  <modelVersion>4.0.0</modelVersion>
-  <groupId>nexus</groupId>
-  <artifactId>color</artifactId>
-  <version>1.0</version>
-  <packaging>jar</packaging>
-</project>
+
+<distributionManagement>
+    <repository>
+        <id>nexus-releases</id>
+        <url>http://13.234.114.219:8081/arunasri@0096/maven-releases/</url>
+    </repository>
+
+    <snapshotRepository>
+        <id>nexus-snapshots</id>
+        <url>http://13.234.114.219:8081/arunasri@0096/maven-snapshots/</url>
+    </snapshotRepository>
+</distributionManagement>
