@@ -7,7 +7,7 @@ pipeline {
     }
 
     environment {
-        IMAGE = "arunasri@0096/color:latest"
+        IMAGE = "arunasri0096/color:latest"
     }
 
     stages {
@@ -23,22 +23,23 @@ pipeline {
                 sh 'mvn clean package'
             }
         }
-      stage('SonarQube') {
-    steps {
-        withSonarQubeEnv('sonar-server') {
-            sh '''
-            mvn sonar:sonar \
-            -Dsonar.projectKey=color \
-            -Dsonar.projectName=color \
-            -Dsonar.host.url=http://13.234.114.219:9000 \
-            '''
+
+        stage('SonarQube') {
+            steps {
+                withSonarQubeEnv('sonar-server') {
+                    sh '''
+                    mvn sonar:sonar \
+                    -Dsonar.projectKey=color \
+                    -Dsonar.projectName=color \
+                    -Dsonar.host.url=http://13.234.114.219:9000
+                    '''
+                }
+            }
         }
-    }
-}
 
         stage('Nexus Upload') {
             steps {
-                sh 'mvn deploy'
+                sh 'mvn deploy --settings /var/lib/jenkins/.m2/settings.xml'
             }
         }
 
@@ -54,10 +55,5 @@ pipeline {
                 sh 'kubectl apply -f service.yaml'
             }
         }
-        stage('Nexus Upload') {
-    steps {
-        sh 'mvn deploy --settings /var/lib/jenkins/.m2/settings.xml'
-    }
-}
     }
 }
