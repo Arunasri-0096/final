@@ -33,7 +33,7 @@ pipeline {
                         mvn sonar:sonar \
                         -Dsonar.projectKey=color \
                         -Dsonar.projectName=color \
-                        -Dsonar.host.url=http://43.204.38.47:9000
+                        -Dsonar.host.url=http://65.2.175.14:9000
                     '''
                 }
             }
